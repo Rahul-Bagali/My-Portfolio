@@ -1,54 +1,77 @@
-const path = require('path'); // Importing the 'path' module for handling file paths
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // Importing the HtmlWebpackPlugin for generating HTML files
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
-    entry: './src/index.js', // Entry point of the application, where the bundling starts
+    mode: isProduction ? 'production' : 'development',
+    entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'), // Output directory for bundled files
-        filename: 'bundle.js', // Name of the output bundle file
-        publicPath: '/', // Public URL of the output directory when referenced in a browser
+        path: path.resolve(__dirname, 'dist'),
+        filename: isProduction ? '[name].[contenthash].js' : 'bundle.js', // Different output for dev
+        publicPath: '/',
     },
     resolve: {
-        extensions: ['.js', '.jsx'], // File extensions to resolve automatically
+        extensions: ['.js', '.jsx'],
     },
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/, // Regex to test for JavaScript and JSX files
-                exclude: /node_modules/, // Exclude the node_modules directory from being processed
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader', // Use Babel loader to transpile JavaScript files
+                    loader: 'babel-loader',
                 },
             },
             {
-                test: /\.css$/, // Regex to test for CSS files
-                use: ['style-loader', 'css-loader'], // Use these loaders to handle CSS
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(png|jpg|gif|svg)$/, // Regex to test for image files
+                test: /\.(png|jpe?g|gif|svg|bmp|webp)$/,
                 use: {
-                    loader: 'file-loader', // Use file-loader to handle image files
+                    loader: 'file-loader',
                     options: {
-                        name: '[path][name].[ext]', // Preserve the original file path and name
-                        outputPath: 'images/', // Output directory for images
+                        name: '[path][name].[ext]',
+                        outputPath: 'images/',
                     },
                 },
             },
         ],
     },
+    optimization: isProduction
+        ? {
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                        chunks: 'all',
+                    },
+                },
+            },
+        }
+        : {},
     devServer: {
         static: {
-            directory: path.join(__dirname, 'dist'), // Directory to serve static files from
+            directory: path.join(__dirname, 'dist'),
         },
-        compress: true, // Enable gzip compression for served files
-        port: 8080, // Port number for the development server
-        historyApiFallback: true, // Enable support for React Router (HTML5 history API)
-        open: true // Automatically open the browser after the server starts
+        compress: true,
+        port: 8080,
+        historyApiFallback: true,
+        open: true,
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: './src/index.html', // Path to the HTML template file
-            favicon: './src/favicon.ico', // Path to the favicon file
+            template: './src/index.html',
+            favicon: './src/Assets/Images/favicon.ico',
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         }),
     ],
 };

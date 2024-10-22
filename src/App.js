@@ -1,9 +1,10 @@
 import React from 'react';
-import RoutingModule from './RoutingModule';
+import './Assets/Styles/Styles.css';
+import LandingPage from './MyApplication/Containers/LandingPage';
 
 const App = () => {
   return (
-    <RoutingModule />
+    <LandingPage />
   );
 }
 
