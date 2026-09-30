@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { memo } from 'react';
 
-const Header = () => {
+const Header = ({ headerRef, forestRef, silhouetteRef }) => {
     return (
-        <header id="welcome-section">
-            <div className="forest" />
-            <div className="silhouette" />
+        <header id="welcome-section" ref={headerRef}>
+            <div className="forest" ref={forestRef} />
+            <div className="silhouette" ref={silhouetteRef} />
             <div className="moon" />
             <div className="container">
                 <h1>
                     <span className="line">I do</span>
-                    {/* <span className="line">Full-Stack</span> */}
                     <span className="line">
                         <span className="color">Full-Stack</span> Development.
                     </span>
@@ -23,4 +22,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);

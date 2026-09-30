@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import portfolio from '../../Assets/Images/portfolio.png';
 
 const Projects = () => {
@@ -15,12 +15,17 @@ const Projects = () => {
                 <div className="projects-wrapper">
                     <div className="project">
                         <a className="project-link" target="_blank" rel="noopener noreferrer">
-                            <img className="project-image" src={portfolio} alt='Screenshot of portfolio.' />
+                            <img
+                                className="project-image"
+                                src={portfolio}
+                                alt="Screenshot of portfolio."
+                                loading="lazy"
+                            />
                         </a>
                         <div className="project-details">
                             <div className="project-tile">
                                 <p className="icons">
-                                    <i className='react' />
+                                    <i className="react" />
                                 </p>
                                 "My portfolio"
                             </div>
@@ -46,4 +51,4 @@ const Projects = () => {
     );
 };
 
-export default Projects;
+export default memo(Projects);

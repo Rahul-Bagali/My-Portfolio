@@ -1,29 +1,29 @@
-import React from 'react';
+import React, { memo } from 'react';
 import SocialLinks from './SocialLinks';
 
-const Menu = ({ showMenu, setShowMenu }) => {
+const Menu = ({ showMenu, toggleMenu }) => {
     return (
         <div className={`menu-container ${showMenu ? 'active' : 'deactive'}`}>
             <div className="overlay" />
             <div className="menu-items">
                 <ul>
                     <li>
-                        <a href="#welcome-section" onClick={() => setShowMenu(!showMenu)}>
+                        <a href="#welcome-section" onClick={toggleMenu}>
                             HOME
                         </a>
                     </li>
                     <li>
-                        <a href="#about" onClick={() => setShowMenu(!showMenu)}>
+                        <a href="#about" onClick={toggleMenu}>
                             ABOUT
                         </a>
                     </li>
                     <li>
-                        <a href="#projects" onClick={() => setShowMenu(!showMenu)}>
+                        <a href="#projects" onClick={toggleMenu}>
                             PORTFOLIO
                         </a>
                     </li>
                     <li>
-                        <a href="#contact" onClick={() => setShowMenu(!showMenu)}>
+                        <a href="#contact" onClick={toggleMenu}>
                             CONTACT
                         </a>
                     </li>
@@ -34,4 +34,4 @@ const Menu = ({ showMenu, setShowMenu }) => {
     );
 };
 
-export default Menu;
+export default memo(Menu);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 const SocialLinks = () => {
     return (
@@ -8,6 +8,7 @@ const SocialLinks = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Link to author's Instagram profile"
+                aria-label="Instagram"
             >
                 <i className="fab fa-instagram" />
             </a>
@@ -17,6 +18,7 @@ const SocialLinks = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Link to author's GitHub Profile"
+                aria-label="GitHub"
             >
                 <i className="fab fa-github" />
             </a>
@@ -25,6 +27,7 @@ const SocialLinks = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Link to author's LinkedIn Profile"
+                aria-label="LinkedIn"
             >
                 <i className="fab fa-linkedin" />
             </a>
@@ -32,4 +35,4 @@ const SocialLinks = () => {
     );
 };
 
-export default SocialLinks;
+export default memo(SocialLinks);
