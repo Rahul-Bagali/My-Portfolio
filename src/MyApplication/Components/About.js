@@ -1,5 +1,5 @@
-import React from 'react';
-import backgroundImage from '../../Assets/Images/Background.jpg'
+import React, { memo } from 'react';
+import backgroundImage from '../../Assets/Images/Background.jpg';
 
 const About = () => {
     return (
@@ -60,4 +60,4 @@ const About = () => {
     );
 };
 
-export default About;
+export default memo(About);

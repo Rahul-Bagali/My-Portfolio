@@ -1,34 +1,37 @@
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import Success from '../../Assets/Images/Success.svg';
 import Error from '../../Assets/Images/Error.svg';
 
-const PopUp = ({ setpopUp, PopUpMsg }) => {
-    const handleClose = () => {
-        setpopUp(false);
-    };
+const PopUp = ({ closePopUp, popUpMsg }) => {
+    const isSuccess = popUpMsg === 'Successful';
+
+    // Close popup on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') closePopUp();
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [closePopUp]);
 
     return (
-        <div className="overlay" style={{ zIndex: '100', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="popup">
-                {PopUpMsg === 'Successful' ?
-                    <React.Fragment>
-                        <button className="close" onClick={handleClose}>&times;</button>
-                        <div className="content">
-                            <img className='ImageWrap' src={Success} alt='Success' />
-                            <h1>Email sent successfully.</h1>
-                        </div>
-                    </React.Fragment> :
-                    <React.Fragment>
-                        <button className="close" onClick={handleClose}>&times;</button>
-                        <div className="content">
-                            <img className='ImageWrap' src={Error} alt='Error' />
-                            <h1>Failed to send email!</h1>
-                        </div>
-                    </React.Fragment>
-                }
-            </div >
-        </div >
+        <div
+            className="overlay"
+            style={{ zIndex: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            onClick={closePopUp}
+            role="dialog"
+            aria-modal="true"
+            aria-label={isSuccess ? 'Email sent successfully' : 'Failed to send email'}
+        >
+            <div className="popup" onClick={(e) => e.stopPropagation()}>
+                <button className="close" onClick={closePopUp} aria-label="Close">&times;</button>
+                <div className="content">
+                    <img className="ImageWrap" src={isSuccess ? Success : Error} alt={isSuccess ? 'Success' : 'Error'} />
+                    <h1>{isSuccess ? 'Email sent successfully.' : 'Failed to send email!'}</h1>
+                </div>
+            </div>
+        </div>
     );
 };
 
-export default PopUp;
+export default memo(PopUp);

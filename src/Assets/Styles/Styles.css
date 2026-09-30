@@ -1,4 +1,4 @@
-/* Made by Yago Estévez (Twitter: @yagoestevez.com) */
+/* Based on design by Yago Estévez */
 
 *,
 *::before,
@@ -8,8 +8,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-@import 'https://fonts.googleapis.com/css?family=Overlock:400,400i,700|Oleo+Script';
 
 html,
 body {
@@ -336,6 +334,10 @@ a:active {
     height: 22px;
     width: 30px;
     outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
 }
 
 .menu-button span,
@@ -487,10 +489,9 @@ a:active {
 }
 
 .moon {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
-    position: fixed;
     background: url(https://raw.githubusercontent.com/yagoestevez/fcc-portfolio/master/src/Images/Moon.svg?sanitize=true) right 150% no-repeat;
     background-size: 40% 40%;
     background-attachment: fixed;
@@ -937,7 +938,6 @@ a:active {
     font-size: .8rem;
     vertical-align: middle;
     margin-left: .5rem;
-    ;
 }
 
 

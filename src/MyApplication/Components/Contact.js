@@ -1,43 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import SocialLinks from './SocialLinks';
 import emailjs from 'emailjs-com';
 import PopUp from './PopUp';
 
+const INITIAL_FORM_STATE = { name: '', email: '', message: '' };
+
 const Contact = () => {
-    const [popUp, setpopUp] = useState(false);
-    const [PopUpMsg, setPopUpMsg] = useState('');
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: '',
-    });
-    const handleChange = (e) => {
+    const [popUp, setPopUp] = useState(false);
+    const [popUpMsg, setPopUpMsg] = useState('');
+    const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = useCallback((e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-    console.log(formData)
-    const handleSubmit = (e) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }, []);
+
+    const handleSubmit = useCallback((e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
 
         emailjs.send('service_6ki9urk', 'template_5902rfb', {
             ...formData,
             to_email: 'rahulbagali218@gmail.com',
         }, 'bKi0Xsdwo4LQTNCo1')
-            .then((response) => {
-                setFormData({ name: '', email: '', message: '' });
-                setPopUpMsg('Successful')
-                setpopUp(true);
+            .then(() => {
+                setFormData(INITIAL_FORM_STATE);
+                setPopUpMsg('Successful');
+                setPopUp(true);
             })
-            .catch((error) => {
-                setPopUpMsg('Failed')
-                setpopUp(true);
+            .catch(() => {
+                setPopUpMsg('Failed');
+                setPopUp(true);
+            })
+            .finally(() => {
+                setIsSubmitting(false);
             });
-    };
+    }, [formData, isSubmitting]);
+
+    const closePopUp = useCallback(() => setPopUp(false), []);
+
     return (
-        <React.Fragment>
+        <>
             <section id="contact">
                 <div className="container">
                     <div className="heading-wrapper">
@@ -56,16 +62,22 @@ const Contact = () => {
                         </div>
                         <SocialLinks />
                     </div>
-                    <form id="contact-form" action="#" onSubmit={handleSubmit}>
+                    <form id="contact-form" onSubmit={handleSubmit}>
                         <input placeholder="Name" name="name" type="text" value={formData.name} onChange={handleChange} required />
                         <input placeholder="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
-                        <textarea placeholder="Message" type="text" name="message" value={formData.message} onChange={handleChange} required />
-                        <input className="buttons cta" id="submit" value="Submit" type="submit" />
+                        <textarea placeholder="Message" name="message" value={formData.message} onChange={handleChange} required />
+                        <input
+                            className="buttons cta"
+                            id="submit"
+                            value={isSubmitting ? 'Sending...' : 'Submit'}
+                            type="submit"
+                            disabled={isSubmitting}
+                        />
                     </form>
                 </div>
             </section>
-            {popUp && <PopUp setpopUp={setpopUp} PopUpMsg={PopUpMsg} />}
-        </React.Fragment>
+            {popUp && <PopUp closePopUp={closePopUp} popUpMsg={popUpMsg} />}
+        </>
     );
 };
 
